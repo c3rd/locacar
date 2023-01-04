@@ -15,6 +15,11 @@ class CreateCarModelsTable extends Migration
     {
         Schema::create('car_models', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('brand_id')->constrained();
+            $table->string('name');
+            $table->string('image');
+            $table->integer('passengers_number');
+            $table->integer('luggage_number');
             $table->timestamps();
         });
     }

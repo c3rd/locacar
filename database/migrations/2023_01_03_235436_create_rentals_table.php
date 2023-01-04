@@ -15,6 +15,13 @@ class CreateRentalsTable extends Migration
     {
         Schema::create('rentals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('car_id')->constrained();
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->double('daily_price', 8, 2);
+            $table->integer('initial_mileage');
+            $table->integer('final_mileage');
             $table->timestamps();
         });
     }
