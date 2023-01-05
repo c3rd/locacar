@@ -14,17 +14,10 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $brands = Brand::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $brands;
+
     }
 
     /**
@@ -35,7 +28,18 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $brand = Brand::create([
+            'name' => $request->name,
+            'image' => $request->image
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Registro criado com sucesso.',
+            'data' => $brand
+        ], 201);
+
     }
 
     /**
@@ -46,18 +50,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Brand $brand)
-    {
-        //
+        return $brand;
     }
 
     /**
@@ -69,7 +62,9 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        $brand->update($request->all());
+
+        return $brand;
     }
 
     /**
@@ -80,6 +75,12 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        $brand->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Registro deletado com sucesso.',
+            'data' => $brand
+        ], 200);
     }
 }
