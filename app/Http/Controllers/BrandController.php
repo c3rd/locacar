@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
+
+    public function __construct(Brand $brand)
+    {
+
+        $this->brand = $brand;
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::all();
+
+        $brands = $this->brand->all();
 
         return $brands;
 
@@ -29,10 +38,7 @@ class BrandController extends Controller
     public function store(Request $request)
     {
 
-        $brand = Brand::create([
-            'name' => $request->name,
-            'image' => $request->image
-        ]);
+        $brand = $this->brand->create($request->all());
 
         return response()->json([
             'status' => true,
@@ -48,8 +54,11 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brand)
+    public function show($id)
     {
+
+        $brand = $this->brand->find($id);
+
         return $brand;
     }
 
@@ -60,11 +69,14 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(Request $request, $id)
     {
+
+        $brand = $this->brand->find($id);
         $brand->update($request->all());
 
         return $brand;
+
     }
 
     /**
@@ -73,8 +85,10 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy($id)
     {
+
+        $brand = $this->brand->find($id);
         $brand->delete();
 
         return response()->json([
