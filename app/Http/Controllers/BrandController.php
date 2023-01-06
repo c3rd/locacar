@@ -38,7 +38,12 @@ class BrandController extends Controller
     public function store(Request $request)
     {
 
-        $brand = $this->brand->create($request->all());
+        $request->validate($this->brand->rules(), $this->brand->feedbacks());
+
+        $brand = $this->brand->create([
+            'name' => $request->name,
+            'image' => $request->image
+        ]);
 
         return response()->json([
             'status' => true,
@@ -59,6 +64,12 @@ class BrandController extends Controller
 
         $brand = $this->brand->find($id);
 
+        if (empty($brand)) {
+            return response()->json([
+                'message' => 'not found!'
+            ], 404);
+        }
+
         return $brand;
     }
 
@@ -73,6 +84,33 @@ class BrandController extends Controller
     {
 
         $brand = $this->brand->find($id);
+
+        if (empty($brand)) {
+            return response()->json([
+                'message' => 'not found.'
+            ], 404);
+        }
+
+        if ($request->method() == 'PATCH') {
+
+            $dynamicRules = array();
+
+            foreach($brand->rules() as $input => $rule) {
+
+                if (array_key_exists($input, $request->all())) {
+                    $dynamicRules[$input] = $rule;
+                }
+
+            }
+
+            $request->validate($dynamicRules, $brand->feedbacks());
+
+        } else {
+
+            $request->validate($brand->rules(), $brand->feedbacks());
+
+        }
+
         $brand->update($request->all());
 
         return $brand;
@@ -89,6 +127,13 @@ class BrandController extends Controller
     {
 
         $brand = $this->brand->find($id);
+
+        if (empty($brand)) {
+            return response()->json([
+                'message' => 'not found.'
+            ], 404);
+        }
+
         $brand->delete();
 
         return response()->json([

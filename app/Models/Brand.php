@@ -14,4 +14,22 @@ class Brand extends Model
         'image'
     ];
 
+    public function rules()
+    {
+        return [
+            'name' => 'required|unique:brands,name,'. $this->id .'',
+            'image' => 'required'
+        ];
+    }
+
+    public function feedbacks()
+    {
+
+        return [
+            'required' => 'The field :attribute is required',
+            'name.unique' => 'The name should be unique',
+        ];
+
+    }
+
 }
